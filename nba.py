@@ -51,6 +51,10 @@ class NBA(object):
             return json.dumps({
                 "items": self.get_past_games(None, games)
             })
+        elif arg.startswith('tod'):
+            return json.dumps({
+                "items": self.get_today_games()
+            })
         teams = self.pick_team(arg)
         if len(teams) > 1:
             r = []
@@ -81,16 +85,34 @@ class NBA(object):
             start.strftime('%Y-%m-%d'), end.strftime('%Y-%m-%d'))
         return json.loads(urlrequest.urlopen(url).read().decode('utf-8'))['data']
 
+    def get_today_games(self):
+        r = []
+        today = datetime.now().strftime('%Y-%m-%d')
+        url = 'http://matchweb.sports.qq.com/kbs/list?columnId=100000&startTime=%s&endTime=%s&_=1483724931822' % (
+            today, today)
+        games = json.loads(urlrequest.urlopen(
+            url).read().decode('utf-8'))['data']
+        if today not in games:
+            return []
+        for game in games[today]:
+            g = self.get_base_game(team, game)
+            g['subtitle'] = game['matchDesc'] + \
+                " " + u'开始于 ' + game['startTime']
+            r.append(g)
+        return r
+
     def get_now_playing_game(self, team, games):
         today = datetime.now().strftime('%Y-%m-%d')
         if today not in games:
             return []
+        r = []
         for game in games[today]:
-            if self.match_game(team, game) and game['matchPeriod'] == '1':
+            if ((team is not None and self.match_game(team, game)) or (team is None)) and game['matchPeriod'] == '1':
                 g = self.get_base_game(team, game)
                 g['subtitle'] = game['matchDesc'] + u" 正在进行 " + \
                     game['quarter'] + " " + game['quarterTime']
-                return [g]
+                r.append(g)
+        return rw
 
     def get_upcoming_games(self, team, games):
         matched_games = []
@@ -186,7 +208,7 @@ class NBA(object):
 
     def pick_team(self, arg):
         if len(arg) == 3 and arg.isupper():
-            for team in teams:
+            for team in self.teams:
                 if team.get_name('ena') == arg:
                     return [team]
         teams = []
