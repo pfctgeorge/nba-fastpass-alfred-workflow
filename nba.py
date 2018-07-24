@@ -77,6 +77,29 @@ class NBA(object):
                 "items": self.get_now_playing_game(team, games) + self.get_upcoming_games(team, games) + self.get_past_games(team, games)
             })
 
+    def search_past_games(self, arg):
+        teams = self.pick_team(arg)
+        if len(teams) > 1:
+            r = []
+            for team in teams:
+                t = {
+                    "autocomplete": team.get_name('ena'),
+                    "valid": False,
+                    "title": team.get_name('en'),
+                    "subtitle": u"选择 " + team.get_name('zh'),
+                    "icon": {
+                        "path": team.get_icon(),
+                    }
+                }
+                r.append(t)
+            return json.dumps({"items": r})
+        else:
+            team = teams[0]
+            games = self.get_recent_games()
+            return json.dumps({
+                "items": self.get_past_games(team, games, True)
+            })
+
     def get_recent_games(self):
         today = datetime.now()
         start = today + timedelta(days=-90)
@@ -145,7 +168,7 @@ class NBA(object):
             if team.get_name(h) == name:
                 return team
 
-    def get_base_game(self, team, game):
+    def get_base_game(self, team, game, without_score=False):
         if team is None:
             team = self.get_team(game['leftName'])
         g = {}
@@ -165,12 +188,15 @@ class NBA(object):
             my_goal = game['leftGoal']
         g['title'] = team.get_name('ena') + " " + my_goal + " " + (
             "@" if away else "vs") + " " + other_goal + " " + other_team.get_name('ena')
+        if without_score:
+            g['title'] = team.get_name(
+                'ena') + " " + ("@" if away else "vs") + " " + other_team.get_name('ena')
         g['icon'] = {'path': other_team.get_icon()}
         g['arg'] = 'http://sports.qq.com/kbsweb/game.htm?mid=%s' % (
             game['mid'])
         return g
 
-    def get_past_games(self, team, games):
+    def get_past_games(self, team, games, without_score=False):
         matched_games = []
         today = datetime.now().strftime('%Y-%m-%d')
         for day, gs in games.items():
@@ -182,7 +208,7 @@ class NBA(object):
         matched_games.sort(key=lambda x: x['startTime'], reverse=True)
         ret_games = []
         for game in matched_games:
-            g = self.get_base_game(team, game)
+            g = self.get_base_game(team, game, without_score)
             g['subtitle'] = game['matchDesc'] + " " + \
                 u'结束于 ' + game['startTime'].split()[0]
             ret_games.append(g)

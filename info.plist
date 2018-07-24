@@ -8,6 +8,19 @@
 	<string>Internet</string>
 	<key>connections</key>
 	<dict>
+		<key>0662387D-A6B9-4343-A9D4-01ACE805C9A2</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>D8B96E1E-416D-4D03-AD87-9FBD312BCFE8</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
 		<key>219B4918-9D02-4FA1-9D9A-5E650839621C</key>
 		<array/>
 		<key>50B0CD10-4D52-4898-9C05-DD3A34A829C3</key>
@@ -23,6 +36,8 @@
 				<false/>
 			</dict>
 		</array>
+		<key>D8B96E1E-416D-4D03-AD87-9FBD312BCFE8</key>
+		<array/>
 	</dict>
 	<key>createdby</key>
 	<string>Jianjin Fan</string>
@@ -103,6 +118,108 @@ print(nba.NBA().search("{query}"))</string>
 			<key>version</key>
 			<integer>1</integer>
 		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>concurrently</key>
+				<false/>
+				<key>escaping</key>
+				<integer>68</integer>
+				<key>script</key>
+				<string>var saf = Application('Safari');
+var windows = saf.windows;
+var newWindowCreated = false;
+var tab = saf.Tab({url:"{query}"})
+console.log(windows.length);
+var tabs = saf.windows[0].tabs;
+if (tabs.length == 1 &amp;&amp; tabs[0].name() == '个人收藏') {
+	newWindowCreated = true;
+}
+
+if (newWindowCreated) {
+	saf.windows[0].tabs[0] = tab;
+} else {
+	saf.windows[0].tabs.push(tab);
+}
+
+for (var i=0;i&lt;3;i++) {
+	var codeState = 'i=1';
+	saf.doJavaScript(codeState, {in: tab});
+}
+var codeRem = 'document.getElementById("head-box").remove()';
+saf.doJavaScript(codeRem, {in: tab});
+var codeRemBot = 'document.getElementsByClassName("left-data-tabs")[0].remove()';
+saf.doJavaScript(codeRemBot, {in: tab});
+var codeClick = 'document.getElementsByClassName("nav-item")[1].click()';
+saf.doJavaScript(codeClick, {in: tab});
+var codeClickVideo = 'document.getElementsByClassName("kbs-tab-item-show")[0].getElementsByClassName("video-item")[0].click()';
+saf.doJavaScript(codeClickVideo, {in: tab});
+
+saf.windows[0].currentTab = tab;</string>
+				<key>scriptargtype</key>
+				<integer>0</integer>
+				<key>scriptfile</key>
+				<string></string>
+				<key>type</key>
+				<integer>7</integer>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.action.script</string>
+			<key>uid</key>
+			<string>D8B96E1E-416D-4D03-AD87-9FBD312BCFE8</string>
+			<key>version</key>
+			<integer>2</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>alfredfiltersresults</key>
+				<false/>
+				<key>alfredfiltersresultsmatchmode</key>
+				<integer>0</integer>
+				<key>argumenttrimmode</key>
+				<integer>0</integer>
+				<key>argumenttype</key>
+				<integer>0</integer>
+				<key>escaping</key>
+				<integer>68</integer>
+				<key>keyword</key>
+				<string>nr</string>
+				<key>queuedelaycustom</key>
+				<integer>3</integer>
+				<key>queuedelayimmediatelyinitially</key>
+				<true/>
+				<key>queuedelaymode</key>
+				<integer>0</integer>
+				<key>queuemode</key>
+				<integer>1</integer>
+				<key>runningsubtext</key>
+				<string>Searching...</string>
+				<key>script</key>
+				<string>import nba
+import sys
+
+print(nba.NBA().search_past_games("{query}"))</string>
+				<key>scriptargtype</key>
+				<integer>0</integer>
+				<key>scriptfile</key>
+				<string></string>
+				<key>subtext</key>
+				<string>Search '{query}' past games</string>
+				<key>title</key>
+				<string>View past games with final score hidden</string>
+				<key>type</key>
+				<integer>3</integer>
+				<key>withspace</key>
+				<true/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.input.scriptfilter</string>
+			<key>uid</key>
+			<string>0662387D-A6B9-4343-A9D4-01ACE805C9A2</string>
+			<key>version</key>
+			<integer>2</integer>
+		</dict>
 	</array>
 	<key>readme</key>
 	<string>Alfred's Script Filter object is extremely powerful, and gives you control over the results displayed in Alfred.
@@ -112,6 +229,13 @@ Alfred 3 now supports JSON, which is the recommended format. XML is also support
 A new option now exists for Script Filters, "Alfred filters results". This allows you to return a whole list of results, let Alfred do the subsequent filtering with extreme performance. When this option is selected, your script will be called once with no argument.</string>
 	<key>uidata</key>
 	<dict>
+		<key>0662387D-A6B9-4343-A9D4-01ACE805C9A2</key>
+		<dict>
+			<key>xpos</key>
+			<integer>80</integer>
+			<key>ypos</key>
+			<integer>230</integer>
+		</dict>
 		<key>219B4918-9D02-4FA1-9D9A-5E650839621C</key>
 		<dict>
 			<key>xpos</key>
@@ -125,6 +249,13 @@ A new option now exists for Script Filters, "Alfred filters results". This allow
 			<integer>70</integer>
 			<key>ypos</key>
 			<integer>50</integer>
+		</dict>
+		<key>D8B96E1E-416D-4D03-AD87-9FBD312BCFE8</key>
+		<dict>
+			<key>xpos</key>
+			<integer>250</integer>
+			<key>ypos</key>
+			<integer>230</integer>
 		</dict>
 	</dict>
 	<key>version</key>
