@@ -141,20 +141,12 @@ class NBA(object):
         matched_games = []
         today = datetime.now().strftime('%Y-%m-%d')
         for day, gs in games.items():
-            if team is None and len(matched_games) >= 15:
-                break
-            if team is not None and len(matched_games) >= 5:
-                break
             if day >= today:
                 for game in gs:
                     if self.match_game(team, game) and game['matchPeriod'] == '0':
                         matched_games.append(game)
-                        if team is None and len(matched_games) >= 15:
-                            break
-                        if team is not None and len(matched_games) >= 5:
-                            break
-
         matched_games.sort(key=lambda x: x['startTime'], reverse=False)
+        matched_games = matched_games[0:10]
         ret_games = []
         for game in matched_games:
             g = self.get_base_game(team, game)

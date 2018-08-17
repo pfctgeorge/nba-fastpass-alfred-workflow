@@ -232,7 +232,7 @@ A new option now exists for Script Filters, "Alfred filters results". This allow
 		<key>0662387D-A6B9-4343-A9D4-01ACE805C9A2</key>
 		<dict>
 			<key>xpos</key>
-			<integer>80</integer>
+			<integer>60</integer>
 			<key>ypos</key>
 			<integer>230</integer>
 		</dict>
@@ -246,7 +246,7 @@ A new option now exists for Script Filters, "Alfred filters results". This allow
 		<key>50B0CD10-4D52-4898-9C05-DD3A34A829C3</key>
 		<dict>
 			<key>xpos</key>
-			<integer>70</integer>
+			<integer>50</integer>
 			<key>ypos</key>
 			<integer>50</integer>
 		</dict>
